@@ -1,4 +1,3 @@
--- Cyberpunk colorscheme for Neovim (Lua entry point)
--- Falls back to colors/cyberpunk.vim for classic Vim
-
-require("cyberpunk").load()
+--- Neovim colorscheme entry point for cyberpunk.
+--- This file is loaded by :colorscheme cyberpunk when using Neovim.
+require("cyberpunk").setup()

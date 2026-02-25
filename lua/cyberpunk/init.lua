@@ -1,26 +1,41 @@
+--- Cyberpunk colorscheme for Neovim.
+---
+--- Usage with lazy.nvim:
+---   { "taigrr/cyberpunk.vim", opts = {} }
+---
+--- Or with custom options:
+---   {
+---     "taigrr/cyberpunk.vim",
+---     opts = {
+---       transparent = true,
+---       italic_comments = true,
+---       italic_keywords = false,
+---       bold_functions = true,
+---       bold_keywords = true,
+---       overrides = {
+---         Normal = { bg = "#0a0a0a" },
+---       },
+---     },
+---   }
 local M = {}
 
----@class CyberpunkConfig
----@field transparent? boolean Disable background color
----@field overrides? table<string, vim.api.keyset.highlight> Override specific highlight groups
-M.config = {
+---@class CyberpunkOpts
+M.defaults = {
   transparent = false,
+  italic_comments = false,
+  italic_keywords = false,
+  bold_functions = false,
+  bold_keywords = true,
   overrides = {},
 }
 
----Configure cyberpunk before loading.
----@param opts? CyberpunkConfig
+--- Configure and load the cyberpunk colorscheme.
+---@param opts? CyberpunkOpts
 function M.setup(opts)
-  M.config = vim.tbl_deep_extend("force", M.config, opts or {})
-end
+  opts = vim.tbl_deep_extend("force", M.defaults, opts or {})
 
----Load the colorscheme.
-function M.load()
   if vim.g.colors_name then
     vim.cmd("hi clear")
-  end
-  if vim.fn.exists("syntax_on") == 1 then
-    vim.cmd("syntax reset")
   end
 
   vim.o.termguicolors = true
@@ -29,19 +44,7 @@ function M.load()
 
   local palette = require("cyberpunk.palette")
   local highlights = require("cyberpunk.highlights")
-
-  -- Apply transparency
-  local p = vim.deepcopy(palette)
-  if M.config.transparent then
-    p.black = p.none
-    p.dark_bg = p.none
-  end
-
-  local groups = highlights.groups(p, M.config)
-
-  for group, hl in pairs(groups) do
-    vim.api.nvim_set_hl(0, group, hl)
-  end
+  highlights.apply(palette, opts)
 end
 
 return M

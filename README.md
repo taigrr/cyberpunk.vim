@@ -3,7 +3,7 @@
 A dark Vim/Neovim colorscheme with neon green, cyan, yellow, and red highlights on a black background — inspired by the cyberpunk aesthetic.
 
 ![Vim](https://img.shields.io/badge/Vim-8%2B-green?logo=vim)
-![Neovim](https://img.shields.io/badge/Neovim-0.5%2B-green?logo=neovim)
+![Neovim](https://img.shields.io/badge/Neovim-0.8%2B-green?logo=neovim)
 
 ## Palette
 
@@ -28,17 +28,22 @@ Plug 'taigrr/cyberpunk.vim'
 ### lazy.nvim
 
 ```lua
+-- Minimal (just works):
+{ "taigrr/cyberpunk.vim", opts = {} }
+
+-- With options:
 {
   "taigrr/cyberpunk.vim",
   lazy = false,
   priority = 1000,
-  config = function()
-    require("cyberpunk").setup({
-      -- transparent = true,  -- disable background color
-      -- overrides = {},      -- override specific highlight groups
-    })
-    vim.cmd.colorscheme("cyberpunk")
-  end,
+  opts = {
+    transparent = false,     -- set true for transparent background
+    italic_comments = false, -- italicize comments
+    italic_keywords = false, -- italicize keywords
+    bold_functions = false,  -- bold function names
+    bold_keywords = true,    -- bold keywords (default)
+    overrides = {},          -- override specific highlight groups
+  },
 }
 ```
 

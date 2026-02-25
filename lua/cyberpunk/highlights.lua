@@ -1,197 +1,190 @@
+--- Cyberpunk highlight group definitions.
 local M = {}
 
----@param p CyberpunkPalette
+--- Apply all highlight groups.
+---@param palette CyberpunkPalette
 ---@param opts table
----@return table<string, vim.api.keyset.highlight>
-function M.groups(p, opts)
-  -- Allow user overrides
-  local overrides = opts.overrides or {}
+function M.apply(palette, opts)
+  local hl = vim.api.nvim_set_hl
 
-  ---@type table<string, vim.api.keyset.highlight>
-  local hl = {
-    -- Core syntax
-    Normal = { fg = p.green, bg = p.black },
-    Comment = { fg = p.cyan, bold = true },
-    Constant = { fg = p.blue, underline = true },
-    Special = { fg = p.special, bold = true },
-    Identifier = { fg = p.blue, bold = true, underline = true },
-    Statement = { fg = p.yellow, bold = true },
-    PreProc = { fg = p.cyan, underline = true },
-    Type = { fg = p.yellow, bold = true, underline = true },
-    Function = { fg = p.green, bold = true },
-    Repeat = { fg = p.yellow, underline = true },
-    Operator = { fg = p.red },
-    Ignore = { fg = p.black },
-    Error = { fg = p.red, bg = p.dark_purple, reverse = true },
-    Todo = { fg = p.blue, bg = p.yellow, standout = true },
+  -- Core syntax
+  hl(0, "Normal", { fg = palette.green, bg = opts.transparent and palette.none or palette.black })
+  hl(0, "Comment", { fg = palette.cyan, italic = opts.italic_comments })
+  hl(0, "Constant", { fg = palette.blue })
+  hl(0, "String", { link = "Constant" })
+  hl(0, "Character", { link = "Constant" })
+  hl(0, "Number", { link = "Constant" })
+  hl(0, "Boolean", { link = "Constant" })
+  hl(0, "Float", { link = "Number" })
+  hl(0, "Special", { fg = palette.special })
+  hl(0, "Tag", { link = "Special" })
+  hl(0, "SpecialChar", { link = "Special" })
+  hl(0, "Delimiter", { link = "Special" })
+  hl(0, "SpecialComment", { link = "Special" })
+  hl(0, "Debug", { link = "Special" })
+  hl(0, "Identifier", { fg = palette.blue, bold = true })
+  hl(0, "Statement", { fg = palette.yellow, bold = true })
+  hl(0, "Label", { link = "Statement" })
+  hl(0, "Keyword", { fg = palette.yellow, bold = opts.bold_keywords, italic = opts.italic_keywords })
+  hl(0, "Exception", { link = "Statement" })
+  hl(0, "PreProc", { fg = palette.cyan })
+  hl(0, "Include", { link = "PreProc" })
+  hl(0, "Define", { link = "PreProc" })
+  hl(0, "Macro", { link = "PreProc" })
+  hl(0, "PreCondit", { link = "PreProc" })
+  hl(0, "Type", { fg = palette.yellow, bold = true })
+  hl(0, "StorageClass", { link = "Type" })
+  hl(0, "Structure", { link = "Type" })
+  hl(0, "Typedef", { link = "Type" })
+  hl(0, "Function", { fg = palette.green, bold = opts.bold_functions })
+  hl(0, "Repeat", { fg = palette.yellow })
+  hl(0, "Conditional", { link = "Repeat" })
+  hl(0, "Operator", { fg = palette.red })
+  hl(0, "Ignore", { fg = palette.black })
+  hl(0, "Error", { fg = palette.red, bg = palette.dark_purple })
+  hl(0, "Todo", { fg = palette.blue, bg = palette.yellow })
 
-    -- Popup menu
-    Pmenu = { fg = p.black, bg = p.green },
-    PmenuSel = { fg = p.blue, bg = p.yellow },
+  -- Popup menu
+  hl(0, "Pmenu", { fg = palette.black, bg = palette.green })
+  hl(0, "PmenuSel", { fg = palette.blue, bg = palette.yellow })
 
-    -- UI elements
-    LineNr = { fg = p.dark_fg },
-    CursorLineNr = { fg = p.yellow, bold = true },
-    CursorLine = { bg = p.dark_bg },
-    CursorColumn = { bg = p.dark_bg },
-    ColorColumn = { bg = p.dark_bg },
-    Visual = { bg = p.visual, reverse = true },
-    VisualNOS = { bg = p.visual, reverse = true },
-    Search = { fg = p.black, bg = p.yellow, reverse = true },
-    IncSearch = { fg = p.black, bg = p.cyan, reverse = true },
-    MatchParen = { fg = p.yellow, bg = p.visual },
-    StatusLine = { fg = p.green, bg = p.dark_bg, bold = true },
-    StatusLineNC = { fg = p.dark_fg, bg = p.dark_bg },
-    VertSplit = { fg = p.dark_fg },
-    Folded = { fg = p.cyan, bg = p.dark_bg },
-    FoldColumn = { fg = p.cyan, bg = p.dark_bg },
-    SignColumn = { bg = p.none },
-    NonText = { fg = p.dark_fg },
-    SpecialKey = { fg = p.dark_fg },
-    Title = { fg = p.yellow, bold = true },
-    Directory = { fg = p.cyan, bold = true },
-    WildMenu = { fg = p.black, bg = p.yellow, standout = true },
-    TabLine = { fg = p.dark_fg, bg = p.dark_bg },
-    TabLineSel = { fg = p.green, bg = p.black, bold = true },
-    TabLineFill = { bg = p.dark_bg },
+  -- UI elements
+  hl(0, "LineNr", { fg = palette.dark_fg })
+  hl(0, "CursorLineNr", { fg = palette.yellow, bold = true })
+  hl(0, "CursorLine", { bg = palette.dark_bg })
+  hl(0, "CursorColumn", { bg = palette.dark_bg })
+  hl(0, "ColorColumn", { bg = palette.dark_bg })
+  hl(0, "Visual", { bg = palette.visual })
+  hl(0, "VisualNOS", { bg = palette.visual })
+  hl(0, "Search", { fg = palette.black, bg = palette.yellow })
+  hl(0, "IncSearch", { fg = palette.black, bg = palette.cyan })
+  hl(0, "MatchParen", { fg = palette.yellow, bg = palette.visual })
+  hl(0, "StatusLine", { fg = palette.green, bg = palette.dark_bg })
+  hl(0, "StatusLineNC", { fg = palette.dark_fg, bg = palette.dark_bg })
+  hl(0, "VertSplit", { fg = palette.dark_fg })
+  hl(0, "WinSeparator", { fg = palette.dark_fg })
+  hl(0, "Folded", { fg = palette.cyan, bg = palette.dark_bg })
+  hl(0, "FoldColumn", { fg = palette.cyan, bg = palette.dark_bg })
+  hl(0, "SignColumn", { bg = palette.none })
+  hl(0, "NonText", { fg = palette.dark_fg })
+  hl(0, "SpecialKey", { fg = palette.dark_fg })
+  hl(0, "Title", { fg = palette.yellow, bold = true })
+  hl(0, "Directory", { fg = palette.cyan })
+  hl(0, "WildMenu", { fg = palette.black, bg = palette.yellow })
+  hl(0, "TabLine", { fg = palette.dark_fg, bg = palette.dark_bg })
+  hl(0, "TabLineSel", { fg = palette.green, bg = palette.black })
+  hl(0, "TabLineFill", { bg = palette.dark_bg })
 
-    -- Diff
-    DiffAdd = { bg = p.diff_green, bold = true },
-    DiffChange = { bg = p.diff_blue, bold = true },
-    DiffDelete = { fg = p.red, bg = p.diff_red, bold = true },
-    DiffText = { bg = p.dark_purple, bold = true, reverse = true },
+  -- Diff
+  hl(0, "DiffAdd", { bg = palette.diff_green })
+  hl(0, "DiffChange", { bg = palette.diff_blue })
+  hl(0, "DiffDelete", { fg = palette.red, bg = palette.diff_red })
+  hl(0, "DiffText", { bg = palette.dark_purple, bold = true })
 
-    -- Diagnostics (Neovim LSP)
-    DiagnosticError = { fg = p.red },
-    DiagnosticWarn = { fg = p.yellow },
-    DiagnosticInfo = { fg = p.blue },
-    DiagnosticHint = { fg = p.cyan },
-    DiagnosticUnderlineError = { undercurl = true, sp = p.red },
-    DiagnosticUnderlineWarn = { undercurl = true, sp = p.yellow },
-    DiagnosticUnderlineInfo = { undercurl = true, sp = p.blue },
-    DiagnosticUnderlineHint = { undercurl = true, sp = p.cyan },
+  -- Diagnostics (Neovim LSP)
+  hl(0, "DiagnosticError", { fg = palette.red })
+  hl(0, "DiagnosticWarn", { fg = palette.yellow })
+  hl(0, "DiagnosticInfo", { fg = palette.blue })
+  hl(0, "DiagnosticHint", { fg = palette.cyan })
+  hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = palette.red })
+  hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = palette.yellow })
+  hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = palette.blue })
+  hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = palette.cyan })
 
-    -- Spell
-    SpellBad = { undercurl = true, sp = p.red },
-    SpellCap = { undercurl = true, sp = p.blue },
-    SpellRare = { undercurl = true, sp = p.special },
-    SpellLocal = { undercurl = true, sp = p.cyan },
+  -- Spell
+  hl(0, "SpellBad", { undercurl = true, sp = palette.red })
+  hl(0, "SpellCap", { undercurl = true, sp = palette.blue })
+  hl(0, "SpellRare", { undercurl = true, sp = palette.special })
+  hl(0, "SpellLocal", { undercurl = true, sp = palette.cyan })
 
-    -- Treesitter highlights
-    ["@comment"] = { link = "Comment" },
-    ["@constant"] = { link = "Constant" },
-    ["@constant.builtin"] = { fg = p.blue, bold = true },
-    ["@constant.macro"] = { link = "Define" },
-    ["@string"] = { link = "Constant" },
-    ["@string.escape"] = { fg = p.special },
-    ["@string.regex"] = { fg = p.special },
-    ["@character"] = { link = "Constant" },
-    ["@number"] = { link = "Constant" },
-    ["@boolean"] = { link = "Constant" },
-    ["@float"] = { link = "Constant" },
-    ["@function"] = { link = "Function" },
-    ["@function.builtin"] = { fg = p.green, bold = true },
-    ["@function.macro"] = { link = "Macro" },
-    ["@function.call"] = { fg = p.green },
-    ["@method"] = { link = "Function" },
-    ["@method.call"] = { fg = p.green },
-    ["@constructor"] = { fg = p.yellow },
-    ["@parameter"] = { fg = p.blue, italic = true },
-    ["@keyword"] = { link = "Statement" },
-    ["@keyword.function"] = { fg = p.yellow, bold = true },
-    ["@keyword.operator"] = { fg = p.red },
-    ["@keyword.return"] = { fg = p.yellow, bold = true },
-    ["@conditional"] = { link = "Repeat" },
-    ["@repeat"] = { link = "Repeat" },
-    ["@label"] = { link = "Statement" },
-    ["@operator"] = { link = "Operator" },
-    ["@exception"] = { link = "Statement" },
-    ["@variable"] = { fg = p.green },
-    ["@variable.builtin"] = { fg = p.green, bold = true },
-    ["@type"] = { link = "Type" },
-    ["@type.builtin"] = { fg = p.yellow },
-    ["@type.definition"] = { link = "Type" },
-    ["@namespace"] = { fg = p.cyan },
-    ["@include"] = { link = "PreProc" },
-    ["@preproc"] = { link = "PreProc" },
-    ["@field"] = { fg = p.green },
-    ["@property"] = { fg = p.green },
-    ["@punctuation.delimiter"] = { fg = p.special },
-    ["@punctuation.bracket"] = { fg = p.special },
-    ["@punctuation.special"] = { fg = p.special },
-    ["@tag"] = { link = "Special" },
-    ["@tag.attribute"] = { fg = p.green },
-    ["@tag.delimiter"] = { fg = p.special },
-    ["@text"] = { fg = p.green },
-    ["@text.strong"] = { bold = true },
-    ["@text.emphasis"] = { italic = true },
-    ["@text.underline"] = { underline = true },
-    ["@text.strike"] = { strikethrough = true },
-    ["@text.title"] = { link = "Title" },
-    ["@text.uri"] = { fg = p.blue, underline = true },
-    ["@text.todo"] = { link = "Todo" },
-    ["@text.note"] = { fg = p.cyan, bold = true },
-    ["@text.warning"] = { fg = p.yellow, bold = true },
-    ["@text.danger"] = { fg = p.red, bold = true },
+  -- Treesitter
+  hl(0, "@comment", { link = "Comment" })
+  hl(0, "@constant", { link = "Constant" })
+  hl(0, "@constant.builtin", { fg = palette.blue, bold = true })
+  hl(0, "@constant.macro", { link = "Macro" })
+  hl(0, "@string", { link = "String" })
+  hl(0, "@string.escape", { fg = palette.special })
+  hl(0, "@string.regex", { fg = palette.cyan })
+  hl(0, "@string.special", { fg = palette.special })
+  hl(0, "@character", { link = "Character" })
+  hl(0, "@number", { link = "Number" })
+  hl(0, "@boolean", { link = "Boolean" })
+  hl(0, "@float", { link = "Float" })
+  hl(0, "@function", { fg = palette.green, bold = opts.bold_functions })
+  hl(0, "@function.builtin", { fg = palette.green, bold = true })
+  hl(0, "@function.call", { fg = palette.green })
+  hl(0, "@function.macro", { fg = palette.cyan })
+  hl(0, "@method", { fg = palette.green })
+  hl(0, "@method.call", { fg = palette.green })
+  hl(0, "@constructor", { fg = palette.yellow })
+  hl(0, "@parameter", { fg = palette.blue, italic = true })
+  hl(0, "@keyword", { fg = palette.yellow, bold = opts.bold_keywords, italic = opts.italic_keywords })
+  hl(0, "@keyword.function", { fg = palette.yellow, italic = opts.italic_keywords })
+  hl(0, "@keyword.operator", { fg = palette.red })
+  hl(0, "@keyword.return", { fg = palette.yellow, bold = true })
+  hl(0, "@conditional", { link = "Conditional" })
+  hl(0, "@repeat", { link = "Repeat" })
+  hl(0, "@label", { link = "Label" })
+  hl(0, "@operator", { link = "Operator" })
+  hl(0, "@exception", { link = "Exception" })
+  hl(0, "@variable", { fg = palette.green })
+  hl(0, "@variable.builtin", { fg = palette.blue, italic = true })
+  hl(0, "@type", { link = "Type" })
+  hl(0, "@type.builtin", { fg = palette.yellow })
+  hl(0, "@type.definition", { link = "Typedef" })
+  hl(0, "@type.qualifier", { fg = palette.yellow, italic = true })
+  hl(0, "@namespace", { fg = palette.cyan })
+  hl(0, "@include", { link = "Include" })
+  hl(0, "@preproc", { link = "PreProc" })
+  hl(0, "@define", { link = "Define" })
+  hl(0, "@field", { fg = palette.blue })
+  hl(0, "@property", { fg = palette.blue })
+  hl(0, "@punctuation.bracket", { fg = palette.special })
+  hl(0, "@punctuation.delimiter", { fg = palette.special })
+  hl(0, "@punctuation.special", { fg = palette.cyan })
+  hl(0, "@tag", { fg = palette.yellow })
+  hl(0, "@tag.attribute", { fg = palette.green, italic = true })
+  hl(0, "@tag.delimiter", { fg = palette.special })
+  hl(0, "@text", { fg = palette.green })
+  hl(0, "@text.strong", { bold = true })
+  hl(0, "@text.emphasis", { italic = true })
+  hl(0, "@text.underline", { underline = true })
+  hl(0, "@text.strike", { strikethrough = true })
+  hl(0, "@text.title", { fg = palette.yellow, bold = true })
+  hl(0, "@text.literal", { fg = palette.cyan })
+  hl(0, "@text.uri", { fg = palette.blue, underline = true })
+  hl(0, "@text.reference", { fg = palette.blue })
 
-    -- LSP semantic tokens
-    ["@lsp.type.class"] = { link = "Type" },
-    ["@lsp.type.decorator"] = { link = "Function" },
-    ["@lsp.type.enum"] = { link = "Type" },
-    ["@lsp.type.enumMember"] = { link = "Constant" },
-    ["@lsp.type.function"] = { link = "Function" },
-    ["@lsp.type.interface"] = { link = "Type" },
-    ["@lsp.type.keyword"] = { link = "Statement" },
-    ["@lsp.type.macro"] = { link = "Macro" },
-    ["@lsp.type.method"] = { link = "Function" },
-    ["@lsp.type.namespace"] = { fg = p.cyan },
-    ["@lsp.type.parameter"] = { fg = p.blue, italic = true },
-    ["@lsp.type.property"] = { fg = p.green },
-    ["@lsp.type.struct"] = { link = "Type" },
-    ["@lsp.type.type"] = { link = "Type" },
-    ["@lsp.type.typeParameter"] = { link = "Type" },
-    ["@lsp.type.variable"] = { fg = p.green },
-    ["@lsp.mod.deprecated"] = { strikethrough = true },
-    ["@lsp.mod.readonly"] = { bold = true },
-  }
+  -- LSP semantic tokens
+  hl(0, "@lsp.type.class", { link = "Type" })
+  hl(0, "@lsp.type.decorator", { fg = palette.cyan })
+  hl(0, "@lsp.type.enum", { link = "Type" })
+  hl(0, "@lsp.type.enumMember", { link = "Constant" })
+  hl(0, "@lsp.type.function", { link = "@function" })
+  hl(0, "@lsp.type.interface", { fg = palette.cyan, bold = true })
+  hl(0, "@lsp.type.keyword", { link = "@keyword" })
+  hl(0, "@lsp.type.macro", { link = "Macro" })
+  hl(0, "@lsp.type.method", { link = "@method" })
+  hl(0, "@lsp.type.namespace", { link = "@namespace" })
+  hl(0, "@lsp.type.parameter", { link = "@parameter" })
+  hl(0, "@lsp.type.property", { link = "@property" })
+  hl(0, "@lsp.type.struct", { link = "Structure" })
+  hl(0, "@lsp.type.type", { link = "Type" })
+  hl(0, "@lsp.type.typeParameter", { fg = palette.yellow, italic = true })
+  hl(0, "@lsp.type.variable", { link = "@variable" })
+  hl(0, "@lsp.mod.deprecated", { strikethrough = true })
 
-  -- Links (same as VimL version)
-  local links = {
-    String = "Constant",
-    Character = "Constant",
-    Number = "Constant",
-    Boolean = "Constant",
-    Float = "Number",
-    Conditional = "Repeat",
-    Label = "Statement",
-    Keyword = "Statement",
-    Exception = "Statement",
-    Include = "PreProc",
-    Define = "PreProc",
-    Macro = "PreProc",
-    PreCondit = "PreProc",
-    StorageClass = "Type",
-    Structure = "Type",
-    Typedef = "Type",
-    Tag = "Special",
-    SpecialChar = "Special",
-    Delimiter = "Special",
-    SpecialComment = "Special",
-    Debug = "Special",
-  }
-
-  for group, target in pairs(links) do
-    if not hl[group] then
-      hl[group] = { link = target }
-    end
-  end
+  -- Git signs (gitsigns.nvim)
+  hl(0, "GitSignsAdd", { fg = palette.green })
+  hl(0, "GitSignsChange", { fg = palette.blue })
+  hl(0, "GitSignsDelete", { fg = palette.red })
 
   -- Apply user overrides
-  for group, def in pairs(overrides) do
-    hl[group] = vim.tbl_extend("force", hl[group] or {}, def)
+  if opts.overrides then
+    for group, settings in pairs(opts.overrides) do
+      hl(0, group, settings)
+    end
   end
-
-  return hl
 end
 
 return M
