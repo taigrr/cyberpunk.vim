@@ -28,7 +28,18 @@ Plug 'taigrr/cyberpunk.vim'
 ### lazy.nvim
 
 ```lua
-{ "taigrr/cyberpunk.vim" }
+{
+  "taigrr/cyberpunk.vim",
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require("cyberpunk").setup({
+      -- transparent = true,  -- disable background color
+      -- overrides = {},      -- override specific highlight groups
+    })
+    vim.cmd.colorscheme("cyberpunk")
+  end,
+}
 ```
 
 ### Packer
@@ -43,9 +54,36 @@ Copy `colors/cyberpunk.vim` to `~/.vim/colors/` (Vim) or `~/.config/nvim/colors/
 
 ## Usage
 
+### Vim
+
 ```vim
 colorscheme cyberpunk
 ```
+
+### Neovim (Lua)
+
+```lua
+-- Optional: configure before loading
+require("cyberpunk").setup({
+  transparent = false,  -- set true for transparent background
+  overrides = {
+    -- Example: make comments italic
+    -- Comment = { fg = "#0eeafa", italic = true },
+  },
+})
+
+vim.cmd.colorscheme("cyberpunk")
+```
+
+The Lua version includes **Treesitter** highlight groups (`@keyword`, `@function`, `@string`, etc.) and **LSP semantic token** highlights out of the box.
+
+## Features
+
+- Full support for Vim 8+ and Neovim 0.5+
+- Neovim gets native Lua highlights (Treesitter, LSP, diagnostics)
+- Vim falls back to the classic VimL colorscheme automatically
+- Configurable via `setup()` — transparency, highlight overrides
+- 80+ highlight groups covering syntax, UI, diff, spell, diagnostics, Treesitter, and LSP
 
 ## License
 
